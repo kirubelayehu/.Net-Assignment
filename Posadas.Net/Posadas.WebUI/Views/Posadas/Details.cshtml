@@ -1,0 +1,287 @@
+﻿@model Posadas.WebUI.ViewModels.Posadas.PosadasViewModel
+
+@using System.Threading
+@using Posadas.Domain.Entities
+@using Posadas.Utils
+@using Posadas.WebUI.Utils;
+
+@{
+    ViewBag.Title = "Details";
+}
+@*@Scripts.Render("~/bundles/posada")*@
+<!-- Important Owl stylesheet -->
+<link rel="stylesheet" href="~/Content/OwlCarousel/owl.carousel.css">
+
+<!-- Default Theme -->
+<link rel="stylesheet" href="~/Content/OwlCarousel/owl.theme.css">
+
+
+<!-- Include js plugin -->
+@*<script src="~/Scripts/owl.carousel.js"></script>*@
+
+
+<h2>Details</h2>
+
+
+
+<div>
+    <h4>Posada</h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dt></dt>
+
+        <dd>
+            <div class="owl-carousel">
+                @foreach (var item in Model.Fotos)
+                {
+
+                    if (!string.IsNullOrEmpty(item.ImagenPublicId))
+                    {
+
+                       @Html.Raw(CloudinaryService.Servers[item.ImageServer].Api.UrlImgUp.BuildImageTag(item.ImagenPublicId,
+                                  new CloudinaryDotNet.StringDictionary("alt=Sample Image", "class=FotosDetallePosada lazyOwl")));
+                    }
+                    else
+                    {
+                        <label>SIN IMAGEN EN LA NUBE</label>
+                    }
+
+
+                }
+            </div>
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Visitas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Visitas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WebSite)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WebSite)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Twitter)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Twitter)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Facebook)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Facebook)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Aprobado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aprobado)
+        </dd>
+
+
+        <dd>
+            @Html.DisplayFor(model => model.Estados)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaCreacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaCreacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaModificacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaModificacion)
+        </dd>
+
+    </dl>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Caracteristicas</h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="form-group">
+
+                <div class="col-md-10">
+                    <ul>
+                        @foreach (CaracteristicasPosadas caracteristica in @Model.Caracteristicas)
+                        {
+                            <li class="col-md-4">
+                                
+                               @if (!string.IsNullOrEmpty(caracteristica.Caracteristica.ImagenPublicId))
+                               {
+                                    @Html.Raw(CloudinaryService.Servers[caracteristica.Caracteristica.ImageServer].Api.UrlImgUp.BuildImageTag(
+                                    caracteristica.Caracteristica.ImagenPublicId,
+                                  new CloudinaryDotNet.StringDictionary(caracteristica.Caracteristica.Nombre, "class=FotosDetallePosada lazyOwl")));
+                                    
+                                    @*<img src="@caracteristica.Caracteristica.Imagen" alt="@caracteristica.Caracteristica.Nombre" class="icono-Caracteristica"/>*@
+                                }
+
+                                @caracteristica.Caracteristica.Nombre
+
+
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        
+
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Habitaciones</h3>
+        </div>
+        <div class="panel-body">
+
+     
+               
+    @for (var i = 0; i < Model.Habitaciones.Count; i++)
+                    {
+                        <div class="col-md-5 divHabitaciones">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Habitaciones[i].TipoHabitacion)
+                               
+                                    @Html.DisplayFor(m => m.Habitaciones[i].TipoHabitacion)
+                               
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Habitaciones[i].MaximoPersonas)
+                                
+                                @Html.DisplayFor(m => m.Habitaciones[i].MaximoPersonas)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Habitaciones[i].PrecioHabitacion):
+                                
+                                    @Html.DisplayFor(m => m.Habitaciones[i].PrecioHabitacion)
+                                
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Habitaciones[i].HabitacionCompartida):
+                              
+                                    @Html.DisplayFor(m => m.Habitaciones[i].HabitacionCompartida)
+                                
+                            </div>
+                        
+                    </div>
+
+                    }
+                
+       
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Mapa</h3>
+        </div>
+        <div class="panel-body">
+
+          
+
+            
+            <div id="map-canvas" style="height: 400px;">
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@section scripts {
+    @Scripts.Render("~/bundles/owlCarousel");
+   
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+
+     
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".owl-carousel").owlCarousel({
+            items: 1,
+
+            center:true,
+            lazyLoad: true,
+            navigation: true,
+            navText: ["pre3v", "n3ext"]
+
+        });
+    });
+
+    function initialize() {
+        var myLatlng = new google.maps.LatLng(@Model.Latitud, @Model.Longitud);
+            var mapOptions = {
+                zoom: 15,
+                center: myLatlng
+            }
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'Hello World!'
+            });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+}

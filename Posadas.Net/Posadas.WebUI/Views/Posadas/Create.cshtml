@@ -1,0 +1,262 @@
+﻿@using System.Activities.Statements
+@using Posadas.Domain.Entities
+@using System.Collections.Generic
+@using Posadas.Utils
+@using Posadas.WebUI.Utils
+@model Posadas.WebUI.ViewModels.Posadas.PosadasViewModel
+
+
+@{
+    ViewBag.Title = "Agregar Posadas";
+}
+
+<h2>Agregar Posadas</h2>
+
+@using (Html.BeginForm("Create", "Posadas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Informacion General</h3>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Telefono, htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Telefono, new {htmlAttributes = new {@class = "form-control"}})
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WebSite, htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.WebSite, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.WebSite, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Twitter, htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Twitter, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Twitter, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Facebook, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Facebook, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Facebook, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Aprobado, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.Aprobado)
+                                @Html.ValidationMessageFor(model => model.Aprobado, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EstadoId, "EstadoId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("EstadoId", Model.Estados, "Selecciona un estado", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.EstadoId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LugarId, "LugarId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("LugarId", Enumerable.Empty<SelectListItem>(), "Seleccione un lugar", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.EstadoId, "", new { @class = "text-danger" })
+
+                        @Html.EditorFor(model => model.OtroLugar, new { htmlAttributes = new { @class = "form-control", @disable = "disabled" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Habitaciones
+                    <input type="button" value="Agregar tipo Habitacion" class="btn-primary  pull-right" id="btnTipoHabitacion"/>
+                </h3>
+               
+            </div>
+            <div class="panel-body" id="divHabitaciones">
+
+                
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Caracteristicas</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        <ul>
+                            @foreach (Caracteristica caracteristica in @ViewBag.Caracteristicas)
+                            {
+                                <li class="col-md-4">
+                                    <label>
+                                        @if (@ViewBag.selectedCaracteristicas.Contains(caracteristica))
+                                        {
+                                            <input type="checkbox" name="caracteristicasId[]" value="@caracteristica.Id" checked="checked" class="form-control input-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" name="caracteristicasId[]" value="@caracteristica.Id" />
+                                        }
+
+                                        @caracteristica.Nombre
+
+                                    
+
+                                        @if (!string.IsNullOrEmpty(caracteristica.ImagenPublicId ))
+                                        {
+                                            @Html.Raw(CloudinaryService.Servers[caracteristica.ImageServer].Api.UrlImgUp.BuildImageTag(
+                                    caracteristica.ImagenPublicId,
+                                       new CloudinaryDotNet.StringDictionary(caracteristica.Nombre, "class=icono-Caracteristica ")));
+
+                                            @*<img src="@caracteristica.Caracteristica.Imagen" alt="@caracteristica.Caracteristica.Nombre" class="icono-Caracteristica"/>*@
+                                        }
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Fotos</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.Label("Fotos", new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-10">
+                        @for (int i = 0; i < Constantes.NumeroDeFotos; i++)
+                        {
+                            <div class="col-md-6 divFotos">
+
+                                <input type="file" class="fileInput" name="FotosModels[@i].FileBase" id="FotosModels[@i].FileBase" data-imgid="imgPreview-@i" />
+                                @Html.Label("Descripcion", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <input type="text" name="FotosModels[@i].Alt" id="FotosModels[@i].Alt" class="form-control" />
+                                <div class="">
+                                    <img id="imgPreview-@i" src="#" alt="your image" class="imgPreview" />
+                                </div>
+
+
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Mapa</h3>
+            </div>
+            <div class="panel-body">
+                
+                <div class="form-group">
+                    @Html.Label("Busqueda en el mapa", htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="us2-address" autocomplete="on">
+                    </div>
+                </div>
+
+
+                <div id="divMap" style="height: 400px;" >
+
+                </div>
+                @Html.HiddenFor(model => model.Longitud, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.HiddenFor(model => model.Latitud, new { htmlAttributes = new { @class = "form-control" } })
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section scripts{
+    <script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var index = 0;
+            $('#btnTipoHabitacion').click(function () {
+                var id = this.id;
+                $.ajax({
+                    url: "/Posadas/GetHabitacionesPartial?index="+index,
+                    success: function (mydata) {
+                        $("#divHabitaciones").append(mydata);
+                    },
+                    type: "POST"
+                });
+                index++;
+                return false;
+            });
+        }); 
+    </script>
+}
+
+@Scripts.Render("~/bundles/posada")
